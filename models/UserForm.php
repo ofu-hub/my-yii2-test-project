@@ -22,7 +22,7 @@ class UserForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [['username', 'password', 'role'], 'required'],
+            [['username', 'password'], 'required'],
         ];
     }
 

@@ -4,10 +4,10 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\models\User;
-use app\models\UserForm;
+use app\models\Client;
+use app\models\ClientForm;
 
-class EmployeesController extends Controller 
+class ClientsController extends Controller 
 {
     /**
      * {@inheritdoc}
@@ -25,24 +25,24 @@ class EmployeesController extends Controller
         ];
     }
 
-    public function actionEmployees()
+    public function actionClients()
     {
-        $employeesArr = User::find()->where(['role' => 'employee'])->all();
+        $clientsArr = Client::find()->all();
 
-        return $this->render('employees', [
-            'employeesArr' => $employeesArr,
+        return $this->render('clients', [
+            'clientsArr' => $clientsArr,
         ]);
     }
 
     public function actionAdd()
     {
-        $model = new UserForm();
+        $model = new ClientForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact()) {
             Yii::$app->session->setFlash('contactFormSubmitted');
             
             return $this->refresh();
         }
-        return $this->render('addEmployee', [
+        return $this->render('addClient', [
             'model' => $model,
         ]);
     }

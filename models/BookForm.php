@@ -2,19 +2,16 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use app\models\Book;
 
-/**
- * ContactForm is the model behind the contact form.
- */
 class BookForm extends Model
 {
     public $name;
     public $vendor_code;
     public $receipt_date;
     public $author_name;
+    public $isCheck;
 
     /**
      * @return array the validation rules.
@@ -22,7 +19,7 @@ class BookForm extends Model
     public function rules()
     {
         return [
-            // name, email, subject and body are required
+            // required
             [['name', 'vendor_code', 'receipt_date', 'author_name'], 'required'],
         ];
     }
@@ -35,6 +32,7 @@ class BookForm extends Model
             $book->vendor_code = $this->vendor_code;
             $book->receipt_date = $this->receipt_date;
             $book->author_name =  $this->author_name;
+            $book->isCheck = true;
             $book->save();
 
             return true;
