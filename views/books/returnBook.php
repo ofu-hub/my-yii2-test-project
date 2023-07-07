@@ -5,9 +5,7 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 use yii\helpers\ArrayHelper;
-use app\models\BookClient;
 use app\models\Client;
-use kartik\select2\Select2;
 
 $this->title = 'Вернуть книгу';
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             
             <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
-                <?= $form->field($model, 'client_id')->hiddenInput(['id' => 'clientidbooks'])->textInput(['autofocus' => true])->dropDownList(
+                <?= $form->field($model, 'client_id')->textInput(['autofocus' => true])->dropDownList(
                     ArrayHelper::map(Client::getAll(),'id','fio'),['prompt'=>'Выберите клиента']);?>
                 
                 <div id="books">
@@ -37,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
+                    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button', 'id' => 'delete_book']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
@@ -50,16 +48,24 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 $script = <<< JS
    
-$('#bookaddforclientform-client_id').change(function(){
+$('#bookreturnform-client_id').change(function(){
     $.ajax({
         type: "GET",
-        url: "index.php?r=books%2Fbookforclient="+$(this).val(),
+        url: "index.php?r=books%2Fbookforclient&book_id="+$(this).val(),
         success: function(data) {
             $("#books").html(data)
         }
     })
 });
-        
+
+$('#delete_book').click(function(){
+    $.ajax({
+        type: "DELETE",
+        url: "index.php?r=books%2Fbookdelete&book_id="+$('#bookreturnform-book_id').val(),
+        success: function(data) {}
+    })
+});
+
 JS;
 $this->registerJs($script);
 ?>

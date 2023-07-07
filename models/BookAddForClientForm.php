@@ -37,6 +37,7 @@ class BookAddForClientForm extends Model
             $book->book_id = $this->book_id;
             $book->employee_id = $this->employee_id;
             $book->period = $this->period;
+            $book->name = $temp->name;
             $book->save();
 
             return true;

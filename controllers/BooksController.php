@@ -7,8 +7,9 @@ use yii\web\Controller;
 use app\models\Book;
 use app\models\BookForm;
 use app\models\BookAddForClientForm;
+use app\models\BookReturnForm;
 use app\models\BookClient;
-use app\models\User;
+use app\models\BooksInfoReturned;
 
 class BooksController extends Controller 
 {
@@ -20,10 +21,6 @@ class BooksController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
     }
@@ -69,7 +66,7 @@ class BooksController extends Controller
     // Return page return book
     public function actionReturnbook()
     {
-        $model = new BookAddForClientForm();
+        $model = new BookReturnForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact()) {
             Yii::$app->session->setFlash('contactFormSubmitted');
             
@@ -80,12 +77,18 @@ class BooksController extends Controller
         ]);
     }
 
-    public function actionBookforclient($client_id) 
+    public function actionBookforclient($book_id) 
     {
-        $model = BookClient::getBookForClientId($client_id);
-        
+        $model = BookClient::getBookForClientId($book_id);
+
         return $this->renderPartial('_bookforclient', [
             'model' => $model,
         ]);
+    }
+
+    public function actionBookdelete($book_id) 
+    {
+        $temp = BookClient::find()->where(['id' => $book_id])->one();
+        $temp->delete();
     }
 }
